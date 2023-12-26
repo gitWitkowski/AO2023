@@ -60,6 +60,7 @@ class GUI ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.wxPanel_image.Bind( wx.EVT_SIZE, self.wxPanel_imageOnSize )
 		self.wxButton_loadFile.Bind( wx.EVT_BUTTON, self.wxButton_loadFileOnButtonClick )
 		self.wxButton_OCR.Bind( wx.EVT_BUTTON, self.wxButton_OCROnButtonClick )
 		self.wxButton_copy.Bind( wx.EVT_BUTTON, self.wxButton_copyOnButtonClick )
@@ -69,6 +70,9 @@ class GUI ( wx.Frame ):
 
 
 	# Virtual event handlers, override them in your derived class
+	def wxPanel_imageOnSize( self, event ):
+		event.Skip()
+
 	def wxButton_loadFileOnButtonClick( self, event ):
 		event.Skip()
 
