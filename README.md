@@ -5,8 +5,4 @@ Instalacja potrzebnych pakietów przy pomocy:
 ```
 pip install -r requirements.txt
 ```
-
-W razie błędu z pakietem wxPython na linuxie pomogła ta komenda:
-```
-sudo apt-get install libgtk-3-dev
-```
+Najlepiej użyć pythona w wersji poniżej 12 na systemie Windows

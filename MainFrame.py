@@ -3,17 +3,30 @@
 from GUI import GUI
 import wx
 from DataLoader import load_data_from_csv, load_mnist_data, combine_datasets, split_data
-from NeuralNetwork import create_neural_network, configure_model, train_model, evaluate_model
+from NeuralNetwork import create_neural_network, configure_model, train_model, evaluate_model, load_model
 from ImageProcessing import load_and_process_image, predict_text_from_image
-
+import os
 
 class MainFrame(GUI):
     def __init__(self, parent):# Now these functions can be accessed directly when importing the ImageProcessing package.
         GUI.__init__(self, None)
         self.image = None  # instance variable for wx.Image
-        self.model = self.load_model() # Load your trained model here
+        self.model = self.load_or_create_model()  # Load existing model or create a new one
 
-    def load_model(self):
+    def load_or_create_model(self):
+        model_file = 'saved_model.h5'  
+
+        if os.path.exists(model_file):
+            print("Loading existing model...")
+            loaded_model = load_model(model_file)
+        else:
+            print("Creating a new model...")
+            loaded_model = self.create_new_model()
+            loaded_model.save(model_file)  
+
+        return loaded_model
+
+    def create_new_model(self):
         features_letters, labels_letters = load_data_from_csv()
         X_train_mnist, y_train_mnist, X_test_mnist, y_test_mnist = load_mnist_data()
         combined_features, combined_labels = combine_datasets(features_letters, labels_letters, X_train_mnist,

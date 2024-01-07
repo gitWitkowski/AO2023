@@ -3,10 +3,16 @@ from tensorflow.keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
-
+import os
 
 def load_data_from_csv():
-    df = pd.read_csv("hd.csv")
+    file_path = "DataLoader/Data/hd.csv"
+
+    if os.path.exists(file_path):
+        df = pd.read_csv(file_path)
+    else:
+        print(f"File '{file_path}' does not exist. Check the file path.")
+
     features_letters = df.values[:, 1:]
     labels_letters = df.values[:, 0]
 

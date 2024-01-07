@@ -2,7 +2,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Flatten, BatchNormalization
-
+from tensorflow.keras.models import load_model
+import os
 
 def create_neural_network():
     model = Sequential()
@@ -38,6 +39,9 @@ def configure_model(model):
 
 def train_model(model, X_train, y_train, X_test, y_test):
     model.fit(X_train, y_train, batch_size=128, epochs=10, verbose=1, validation_data=(X_test, y_test))
+    if not os.path.exists("NeuralNetwork/Model"):
+        os.makedirs("NeuralNetwork/Model")
+    model.save("NeuralNetwork/Model/model.h5")
     return model
 
 
@@ -60,3 +64,8 @@ def evaluate_model(model, X_test, y_test):
             print('True value: ', actual)
 
     print(counter)
+
+
+def load_saved_model():
+    loaded_model = load_model("NeuralNetwork/Model/model.h5")
+    return loaded_model
