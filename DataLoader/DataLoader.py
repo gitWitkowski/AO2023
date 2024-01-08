@@ -1,12 +1,13 @@
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
+from Constants import DATA_SET_FULL_PATH
 import numpy as np
 import pandas as pd
 import os
 
 def load_data_from_csv():
-    file_path = "DataLoader/Data/hd.csv"
+    file_path = DATA_SET_FULL_PATH
 
     if os.path.exists(file_path):
         df = pd.read_csv(file_path)
