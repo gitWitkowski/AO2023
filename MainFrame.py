@@ -3,27 +3,28 @@
 from GUI import GUI
 import wx
 from DataLoader import load_data_from_csv, load_mnist_data, combine_datasets, split_data
-from NeuralNetwork import create_neural_network, configure_model, train_model, evaluate_model, load_model
+from NeuralNetwork import create_neural_network, configure_model, train_model, evaluate_model, load_saved_model
 from ImageProcessing import load_and_process_image, predict_text_from_image
+from Constants import MODEL_DIRECTORY, MODEL_FILE_NAME, MODEL_FULL_PATH
 import os
 
 class MainFrame(GUI):
     def __init__(self, parent):# Now these functions can be accessed directly when importing the ImageProcessing package.
         GUI.__init__(self, None)
         self.image = None  # instance variable for wx.Image
+        self.image_path = None
         self.model = self.load_or_create_model()  # Load existing model or create a new one
 
     def load_or_create_model(self):
-        model_file = 'saved_model.h5'  
-
-        if os.path.exists(model_file):
+        if os.path.exists(MODEL_FULL_PATH):
             print("Loading existing model...")
-            loaded_model = load_model(model_file)
+            loaded_model = load_saved_model(MODEL_FULL_PATH)
         else:
             print("Creating a new model...")
-            loaded_model = self.create_new_model()
-            loaded_model.save(model_file)  
-
+            new_model = self.create_new_model()
+            if not os.path.exists(MODEL_DIRECTORY):
+                os.makedirs(MODEL_DIRECTORY)
+            new_model.save(MODEL_FULL_PATH)
         return loaded_model
 
     def create_new_model(self):
@@ -85,11 +86,10 @@ class MainFrame(GUI):
             return
 
         # get path to file
-        pathname = fileDialog.GetPath()
-
+        self.image_path = fileDialog.GetPath()
         try:
             # load image to file
-            self.image = wx.Image(pathname, wx.BITMAP_TYPE_ANY)
+            self.image = wx.Image(self.image_path, wx.BITMAP_TYPE_ANY)
             # draw image on wxPanel_image
             self.onPaint(self.image.Copy())
         except IOError:
@@ -103,6 +103,11 @@ class MainFrame(GUI):
 
     def wxButton_OCROnButtonClick(self, event):
         print("wxButton_OCR")
+        if self.image is not None:
+            cropped_chars = load_and_process_image(self.image_path)
+            if cropped_chars:
+                predicted_text = predict_text_from_image(cropped_chars, self.model)
+                self.textCtrl_outputText.SetValue(predicted_text)
         # trzeba zaimplementowac cale dzialanie OCR
         # po sczytaniu znakow/tekstu z obrazka mozna go wpisac do read-only panelu tekstowego (textCtrl_outputText) 
 
