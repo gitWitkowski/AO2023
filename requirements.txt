@@ -1,0 +1,7 @@
+wxPython
+numpy
+pandas
+tensorflow
+scikit-learn
+matplotlib
+opencv-python
