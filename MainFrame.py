@@ -113,4 +113,7 @@ class MainFrame(GUI):
 
     def wxButton_copyOnButtonClick(self, event):
         print("wxButton_copy")
-    # ten przycisk jest tylko po to, zeby po wcisnieciu go zawartosc panelu tekstowego (textCtrl_outputText) zostala przekopiowana do schowka
+        # open the clipboard and write content of textCtrl_outputText into it
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(self.textCtrl_outputText.GetValue()))
+            wx.TheClipboard.Close()
