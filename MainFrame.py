@@ -17,7 +17,7 @@ class MainFrame(GUI):
 
     def load_or_create_model(self):
         if os.path.exists(MODEL_FULL_PATH):
-            print("Loading existing model...")
+            print("Loading existing model: " + MODEL_FULL_PATH)
             loaded_model = load_saved_model(MODEL_FULL_PATH)
         else:
             print("Creating a new model...")
@@ -77,8 +77,8 @@ class MainFrame(GUI):
         # trzeba zaimplementowac zaladowanie obrazka z pliku do jakiejs zmiennej
         # mozna tez od razy wyswietlic zaladowany obrazek na przygotowanym panelu (wxPanel_image)
 
-        # open file dialog window, allow to select only .jpg and .png files
-        fileDialog = wx.FileDialog(self, "Open image file", wildcard="JPG and PNG files (*.jpg;*.png)|*.jpg;*.png",
+        # open file dialog window, allow to select only .png files
+        fileDialog = wx.FileDialog(self, "Open image file", wildcard="PNG files (*.png)|*.png",
                                    style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 
         # close dialog window if user has changed mind
@@ -117,3 +117,6 @@ class MainFrame(GUI):
         if wx.TheClipboard.Open():
             wx.TheClipboard.SetData(wx.TextDataObject(self.textCtrl_outputText.GetValue()))
             wx.TheClipboard.Close()
+
+        # Wyświetl komunikat potwierdzający skopiowanie
+        wx.MessageBox("Tekst został skopiowany do schowka.", "Sukces", wx.OK | wx.ICON_INFORMATION)
