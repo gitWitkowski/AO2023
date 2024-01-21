@@ -5,7 +5,7 @@ import wx
 from DataLoader import load_data_from_csv, load_mnist_data, combine_datasets, split_data
 from NeuralNetwork import create_neural_network, configure_model, train_model, evaluate_model, load_saved_model
 from ImageProcessing import load_and_process_image, predict_text_from_image
-from Constants import MODEL_DIRECTORY, MODEL_FILE_NAME, MODEL_FULL_PATH
+from Constants import MODEL_DIRECTORY, MODEL_FULL_PATH
 import os
 
 class MainFrame(GUI):
@@ -39,6 +39,7 @@ class MainFrame(GUI):
         model = train_model(model, X_train, y_train, X_test, y_test)
 
         return model
+    
     # method repainting loaded image on wxPanel_image
     def onPaint(self, imageToPaint):
         # create ClientDC and clear panel 
@@ -74,8 +75,6 @@ class MainFrame(GUI):
 
     def wxButton_loadFileOnButtonClick(self, event):
         print("wxButton_loadFile")
-        # trzeba zaimplementowac zaladowanie obrazka z pliku do jakiejs zmiennej
-        # mozna tez od razy wyswietlic zaladowany obrazek na przygotowanym panelu (wxPanel_image)
 
         # open file dialog window, allow to select only .png files
         fileDialog = wx.FileDialog(self, "Open image file", wildcard="PNG files (*.png)|*.png",
@@ -108,8 +107,6 @@ class MainFrame(GUI):
             if cropped_chars:
                 predicted_text = predict_text_from_image(cropped_chars, self.model)
                 self.textCtrl_outputText.SetValue(predicted_text)
-        # trzeba zaimplementowac cale dzialanie OCR
-        # po sczytaniu znakow/tekstu z obrazka mozna go wpisac do read-only panelu tekstowego (textCtrl_outputText) 
 
     def wxButton_copyOnButtonClick(self, event):
         print("wxButton_copy")
@@ -118,5 +115,4 @@ class MainFrame(GUI):
             wx.TheClipboard.SetData(wx.TextDataObject(self.textCtrl_outputText.GetValue()))
             wx.TheClipboard.Close()
 
-        # Wyświetl komunikat potwierdzający skopiowanie
         wx.MessageBox("Tekst został skopiowany do schowka.", "Sukces", wx.OK | wx.ICON_INFORMATION)
